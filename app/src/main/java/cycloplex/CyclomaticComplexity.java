@@ -9,6 +9,17 @@ public class CyclomaticComplexity {
 
     /**\/ profundidade da recursão por diretórios; */
     private final int deepRec = 20;
+    /**\/ obter do usuário o tipo de avaliação a ser realizado; */
+    private int tipoParaAnalise;
+    /**\/ tipos de avaliações; */
+    public static enum tiposAnalise {
+        BLOCOS,
+        LINHAS
+    };
+
+    public void setTipoParaAnalise(int tipoParaAnalise){
+        this.tipoParaAnalise = tipoParaAnalise;
+    }
 
 	private int checkByBlocks(final String fileName, final String lang) {
 		int complexity = 0;
@@ -123,13 +134,17 @@ public class CyclomaticComplexity {
         return resultRisk;
 	}
 
-    public void checkFile(String fileName){
+    /**\/ fazer avaliação de um arquivo; */
+    public void checkFile(final String fileName){
         String ext = getExtensionByStringHandling(fileName).orElse(null);
         if(ext != null){
             ext = ext.toLowerCase();
             if(wordsLang.langWords.keySet().contains(ext)){
-                checkByBlocks(fileName, ext);
-                // checkByNestedLines(fileName, ext);
+                if(this.tipoParaAnalise == tiposAnalise.BLOCOS.ordinal()){
+                    checkByBlocks(fileName, ext);
+                }else if(this.tipoParaAnalise == tiposAnalise.LINHAS.ordinal()){
+                    checkByNestedLines(fileName, ext);
+                }
             }
         }
     }
@@ -150,7 +165,11 @@ public class CyclomaticComplexity {
                     if(ext != null){
                         ext = ext.toLowerCase();
                         if(wordsLang.langWords.keySet().contains(ext)){
-                            checkByBlocks(arq.getAbsolutePath(), ext);
+                            if(this.tipoParaAnalise == tiposAnalise.BLOCOS.ordinal()){
+                                checkByBlocks(arq.getAbsolutePath(), ext);
+                            }else if(this.tipoParaAnalise == tiposAnalise.LINHAS.ordinal()){
+                                checkByNestedLines(arq.getAbsolutePath(), ext);
+                            }
                         }
                     }
                 }else if(arq.isDirectory() && deep <= deepRec){
