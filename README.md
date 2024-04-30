@@ -28,3 +28,8 @@ Compilar projeto:
 ```
 $ gradle build
 ```
+
+Local do arquivo .jar gerado:
+```
+$ CycloPlex/app/build/libs/
+```
