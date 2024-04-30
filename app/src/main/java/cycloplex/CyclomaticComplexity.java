@@ -9,7 +9,7 @@ public class CyclomaticComplexity {
 
     private final int deepRec = 10;
 
-	private int check(final String fileName, final String lang) {
+	private int checkByBlocks(final String fileName, final String lang) {
 		int complexity = 0;
         final String[] blocks = wordsLang.langBlocks.get(lang);
 		final String[] keywords = wordsLang.langWords.get(lang);
@@ -84,7 +84,7 @@ public class CyclomaticComplexity {
         if(ext != null){
             ext = ext.toLowerCase();
             if(wordsLang.langWords.keySet().contains(ext)){
-                check(fileName, ext);
+                checkByBlocks(fileName, ext);
             }
         }
     }
@@ -95,7 +95,7 @@ public class CyclomaticComplexity {
         .map(f -> f.substring(filename.lastIndexOf(".") + 1));
     }
 
-    private void checkFilesDir(String dir, int deep){
+    private void checkFilesDir(final String dir, final int deep){
         final File dirBase = new File(dir);
         if(dirBase.exists()){
             final File[] arqs = dirBase.listFiles();
@@ -105,7 +105,7 @@ public class CyclomaticComplexity {
                     if(ext != null){
                         ext = ext.toLowerCase();
                         if(wordsLang.langWords.keySet().contains(ext)){
-                            check(arq.getAbsolutePath(), ext);
+                            checkByBlocks(arq.getAbsolutePath(), ext);
                         }
                     }
                 }else if(arq.isDirectory() && deep <= deepRec){

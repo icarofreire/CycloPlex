@@ -4,17 +4,24 @@
 package cycloplex;
 
 import cycloplex.CyclomaticComplexity;
+import java.io.File;
 
 public class App {
-    public String getGreeting() {
-        return "Hello World! ;)";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
 
         CyclomaticComplexity comp = new CyclomaticComplexity();
-        // comp.checkFile("teste.java");
         comp.checkFilesDir("/home/icaro/Documentos/johan");
+
+        /*\/ opções de argumentos de linha de comando; */
+        if(args.length > 0 && args[0] != null){
+            final File dir = new File(args[0]);
+            if(dir.exists() && dir.isDirectory()){
+                comp.checkFilesDir(dir.getAbsolutePath());
+            }else{
+                System.out.println("O caminho informado não é um diretório;");
+            }
+        }
+
     }
 }
