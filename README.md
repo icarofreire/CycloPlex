@@ -7,13 +7,11 @@ $ java -jar cycloplex.jar -dir=<dir>
 ```
 
 Avaliação por blocos:
-
 ```
 $ java -jar cycloplex.jar -dir=<dir> -b
 ```
 
 Avaliação por linhas:
-
 ```
 $ java -jar cycloplex.jar -dir=<dir> -l
 ```

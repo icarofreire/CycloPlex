@@ -25,16 +25,20 @@ public class App {
         return value;
     }
 
+    private static void testes(CyclomaticComplexity comp){
+        /** \/ casos de testes; */
+        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
+        comp.setMinComplex(4);
+        // comp.checkFile("teste.java");
+        comp.checkFilesDir("/home/icaro/Documentos/johan");
+        /** /\ casos de testes; */
+    }
+
     public static void main(String[] args) {
 
         final CyclomaticComplexity comp = new CyclomaticComplexity();
 
-        // /** \/ casos de testes; */
-        // comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
-        // comp.setMinComplex(4);
-        // comp.checkFile("teste.java");
-        // comp.checkFilesDir("/home/icaro/Documentos/johan");
-        // /** /\ casos de testes; */
+        // testes(comp);
 
         /*\/ opções de argumentos de linha de comando; */
         if(args.length > 0){
