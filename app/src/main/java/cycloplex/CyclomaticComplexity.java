@@ -9,7 +9,7 @@ public class CyclomaticComplexity {
 
     private final int deepRec = 10;
 
-	public int check(final String fileName, final String lang) {
+	private int check(final String fileName, final String lang) {
 		int complexity = 0;
 
         final String[] blocks = wordsLang.langBlocks.get(lang);
@@ -67,7 +67,7 @@ public class CyclomaticComplexity {
 		return (complexity);
 	}
 
-	public String showCyclomaticComplexity(int ccValue) {
+	private String showCyclomaticComplexity(int ccValue) {
 		String resultRisk = "";
 		if (ccValue> 50)
 			resultRisk = "Most complex and highly unstable method";
@@ -81,34 +81,32 @@ public class CyclomaticComplexity {
 	}
 
     public void checkFile(String fileName){
-        CyclomaticComplexity cc = new CyclomaticComplexity();
         String ext = getExtensionByStringHandling(fileName).orElse(null);
         if(ext != null){
             ext = ext.toLowerCase();
             if(wordsLang.langWords.keySet().contains(ext)){
-                cc.check(fileName, ext);
+                check(fileName, ext);
             }
         }
     }
 
-    public Optional<String> getExtensionByStringHandling(String filename) {
+    private Optional<String> getExtensionByStringHandling(String filename) {
         return Optional.ofNullable(filename)
         .filter(f -> f.contains("."))
         .map(f -> f.substring(filename.lastIndexOf(".") + 1));
     }
 
-    public void checkFilesDir(String dir, int deep){
+    private void checkFilesDir(String dir, int deep){
         File dirBase = new File(dir);
         if(dirBase.exists()){
             File[] arqs = dirBase.listFiles();
-            CyclomaticComplexity cc = new CyclomaticComplexity();
             for(File arq : arqs){
                 if(arq.isFile()){
                     String ext = getExtensionByStringHandling(arq.getAbsolutePath()).orElse(null);
                     if(ext != null){
                         ext = ext.toLowerCase();
                         if(wordsLang.langWords.keySet().contains(ext)){
-                            cc.check(arq.getAbsolutePath(), ext);
+                            check(arq.getAbsolutePath(), ext);
                         }
                     }
                 }else if(arq.isDirectory() && deep <= deepRec){
