@@ -63,7 +63,9 @@ public class CyclomaticComplexity {
                         indB--;
                         if(indB == 0){
                             fimLine = conLine;
-                            System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showCyclomaticComplexity(complexity) + ";");
+                            if(complexity > 0){
+                                System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showLevelCyclomaticComplexity(complexity) + ";");
+                            }
 
                             iniLine = -1;
                             fimLine = -1;
@@ -112,7 +114,7 @@ public class CyclomaticComplexity {
                 if(line != null && line.isBlank()){
                     if(iniLine != -1 && complexity > 0){
                         fimLine = conLine;
-                        System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showCyclomaticComplexity(complexity) + ";");
+                        System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showLevelCyclomaticComplexity(complexity) + ";");
                         iniLine = -1;
                         fimLine = -1;
                         complexity = 0;
@@ -125,7 +127,7 @@ public class CyclomaticComplexity {
 		return (complexity);
 	}
 
-	private String showCyclomaticComplexity(int ccValue) {
+	private String showLevelCyclomaticComplexity(int ccValue) {
 		String resultRisk = "";
 		if (ccValue> 50)
 			resultRisk = "Most complex and highly unstable method";
