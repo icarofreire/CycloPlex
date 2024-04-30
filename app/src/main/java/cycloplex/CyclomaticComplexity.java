@@ -2,16 +2,18 @@ package cycloplex;
 
 import java.io.*;
 import java.util.*;
+import cycloplex.wordsLang;
 
 
 public class CyclomaticComplexity {
 
     private final int deepRec = 10;
 
-	public int check(final String fileName) {
+	public int check(final String fileName, final String lang) {
 		int complexity = 0;
-        final String[] blocks = {"{", "}"};
-		final String[] keywords = {"if","else","while","case","for","switch","do","continue","break","&&","||","?",":","catch","finally","throw","throws","default","return"};
+
+        final String[] blocks = wordsLang.langBlocks.get(lang);
+		final String[] keywords = wordsLang.langWords.get(lang);
 		String line = null;
 		try {
 			FileReader fr = new FileReader(fileName);
@@ -80,7 +82,19 @@ public class CyclomaticComplexity {
 
     public void checkFile(String fileName){
         CyclomaticComplexity cc = new CyclomaticComplexity();
-        cc.check(fileName);
+        String ext = getExtensionByStringHandling(fileName).orElse(null);
+        if(ext != null){
+            ext = ext.toLowerCase();
+            if(wordsLang.langWords.keySet().contains(ext)){
+                cc.check(fileName, ext);
+            }
+        }
+    }
+
+    public Optional<String> getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+        .filter(f -> f.contains("."))
+        .map(f -> f.substring(filename.lastIndexOf(".") + 1));
     }
 
     public void checkFilesDir(String dir, int deep){
@@ -90,7 +104,13 @@ public class CyclomaticComplexity {
             CyclomaticComplexity cc = new CyclomaticComplexity();
             for(File arq : arqs){
                 if(arq.isFile()){
-                    cc.check(arq.getAbsolutePath());
+                    String ext = getExtensionByStringHandling(arq.getAbsolutePath()).orElse(null);
+                    if(ext != null){
+                        ext = ext.toLowerCase();
+                        if(wordsLang.langWords.keySet().contains(ext)){
+                            cc.check(arq.getAbsolutePath(), ext);
+                        }
+                    }
                 }else if(arq.isDirectory() && deep <= deepRec){
                     checkFilesDir(arq.getAbsolutePath(), deep+1);
                 }
