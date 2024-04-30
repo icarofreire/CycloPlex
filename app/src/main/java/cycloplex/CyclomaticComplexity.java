@@ -11,13 +11,12 @@ public class CyclomaticComplexity {
 
 	private int check(final String fileName, final String lang) {
 		int complexity = 0;
-
         final String[] blocks = wordsLang.langBlocks.get(lang);
 		final String[] keywords = wordsLang.langWords.get(lang);
 		String line = null;
 		try {
-			FileReader fr = new FileReader(fileName);
-			BufferedReader br = new BufferedReader(fr);
+			final FileReader fr = new FileReader(fileName);
+			final BufferedReader br = new BufferedReader(fr);
 			line = br.readLine();
 
             int iniLine = -1;
@@ -28,7 +27,7 @@ public class CyclomaticComplexity {
 			while (line != null)
 			{
                 conLine++;
-				StringTokenizer stTokenizer = new StringTokenizer(line);
+				final StringTokenizer stTokenizer = new StringTokenizer(line);
 				while (stTokenizer.hasMoreTokens())
 				{
 					String words = stTokenizer.nextToken();
@@ -97,9 +96,9 @@ public class CyclomaticComplexity {
     }
 
     private void checkFilesDir(String dir, int deep){
-        File dirBase = new File(dir);
+        final File dirBase = new File(dir);
         if(dirBase.exists()){
-            File[] arqs = dirBase.listFiles();
+            final File[] arqs = dirBase.listFiles();
             for(File arq : arqs){
                 if(arq.isFile()){
                     String ext = getExtensionByStringHandling(arq.getAbsolutePath()).orElse(null);
