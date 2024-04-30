@@ -7,33 +7,61 @@ import cycloplex.CyclomaticComplexity;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class App {
+
+    private static String extrairValCommand(String command, List<String> argumentos){
+        Optional<String> commandVal = argumentos
+        .stream()
+        .filter(x -> x.indexOf(command) != -1)
+        .collect(Collectors.reducing((a, b) -> null));
+
+        String value = null;
+        if(commandVal.isPresent()){
+            value = commandVal.get().substring(command.length(), commandVal.get().length());
+        }
+        return value;
+    }
 
     public static void main(String[] args) {
 
         final CyclomaticComplexity comp = new CyclomaticComplexity();
 
         // /** \/ casos de testes; */
-        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
-        // // comp.checkFile("teste.java");
-        comp.setMinComplex(4);
-        comp.checkFilesDir("/home/icaro/Documentos/johan");
+        // comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
+        // comp.setMinComplex(4);
+        // comp.checkFile("teste.java");
+        // comp.checkFilesDir("/home/icaro/Documentos/johan");
         // /** /\ casos de testes; */
 
         /*\/ opções de argumentos de linha de comando; */
-        if(args.length > 0 && args[0] != null){
-            final File dir = new File(args[0]);
-            if(dir.exists() && dir.isDirectory()){
-                List<String> argumentos = Arrays.asList(args);
-                if(argumentos.contains("-b")){
-                    comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.BLOCOS.ordinal());
-                }else if(argumentos.contains("-l")){
-                    comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
+        if(args.length > 0){
+
+            final List<String> argumentos = Arrays.asList(args);
+            final String dirProjeto = extrairValCommand("-dir=", argumentos);
+
+            if(dirProjeto != null){
+                final File dir = new File(dirProjeto);
+                if(dir.exists() && dir.isDirectory()){
+
+                    if(argumentos.contains("-b")){
+                        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.BLOCOS.ordinal());
+                    }else if(argumentos.contains("-l")){
+                        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
+                    }
+
+                    String complex = extrairValCommand("-p=", argumentos);
+                    if(complex != null){
+                        int intComplex = Integer.parseInt(complex);
+                        comp.setMinComplex(intComplex);
+                    }
+
+                    comp.checkFilesDir(dir.getAbsolutePath());
+                }else{
+                    System.out.println("O caminho informado não é um diretório;");
                 }
-                comp.checkFilesDir(dir.getAbsolutePath());
-            }else{
-                System.out.println("O caminho informado não é um diretório;");
             }
         }
 

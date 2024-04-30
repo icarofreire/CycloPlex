@@ -3,22 +3,23 @@
 ## Run
 
 ```
-$ java -jar cycloplex.jar <dir>
+$ java -jar cycloplex.jar -dir=<dir>
 ```
 
 Avaliação por blocos:
 
 ```
-$ java -jar cycloplex.jar <dir> -b
+$ java -jar cycloplex.jar -dir=<dir> -b
 ```
 
 Avaliação por linhas:
 
 ```
-$ java -jar cycloplex.jar <dir> -l
+$ java -jar cycloplex.jar -dir=<dir> -l
 ```
 
 ## Development
+
 Executar projeto:
 ```
 $ gradle run
