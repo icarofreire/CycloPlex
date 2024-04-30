@@ -2,10 +2,11 @@ package cycloplex;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class CyclomaticComplexity {
+
+    private final int deepRec = 10;
 
 	public int check(final String fileName) {
 		int complexity = 0;
@@ -29,7 +30,7 @@ public class CyclomaticComplexity {
 				while (stTokenizer.hasMoreTokens())
 				{
 					String words = stTokenizer.nextToken();
-                    if(words.equals(blocks[0])){
+                    if(words.equals(blocks[0]) || words.indexOf(blocks[0]) != -1){
                         if(iniLine == -1) iniLine = conLine;
                         indB++;
                     }
@@ -42,12 +43,11 @@ public class CyclomaticComplexity {
                         }
                     }
 
-                    if(words.equals(blocks[1])){
+                    if(words.equals(blocks[1]) || words.indexOf(blocks[1]) != -1){
                         indB--;
-                        
                         if(indB == 0){
                             fimLine = conLine;
-                            System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + ";");
+                            System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showCyclomaticComplexity(complexity) + ";");
 
                             iniLine = -1;
                             fimLine = -1;
@@ -65,30 +65,40 @@ public class CyclomaticComplexity {
 		return (complexity);
 	}
 
-	public void showCyclomaticComplexity(String fileName, int ccValue) {
-		// System.out.println("\nFile '"+ fileName +"' : The Cyclomatic Complexity is : "+ccValue);
-		System.out.print("\nResult : ");
-		if (ccValue> 50){
-			System.out.print("Most complex and highly unstable method ");
-		}
+	public String showCyclomaticComplexity(int ccValue) {
+		String resultRisk = "";
+		if (ccValue> 50)
+			resultRisk = "Most complex and highly unstable method";
 		else if(ccValue>= 21 && ccValue<=50)
-			System.out.print("High risk");
+			resultRisk = "High risk";
 		else if(ccValue>= 11 && ccValue<=20)
-			System.out.print("Moderate risk");
+			resultRisk = "Moderate risk";
 		else
-			System.out.print("Low risk program");
-	}
-	
-	public static void main(String ss[])
-	{
-		CyclomaticComplexity cc = new CyclomaticComplexity();
-        String fileName = "teste.java";
-		cc.showCyclomaticComplexity(fileName, cc.check(fileName));
+			resultRisk = "Low risk program";
+        return resultRisk;
 	}
 
-    public static void checkFile(){
+    public void checkFile(String fileName){
         CyclomaticComplexity cc = new CyclomaticComplexity();
-        String fileName = "teste.java";
-		cc.showCyclomaticComplexity(fileName, cc.check(fileName));
+        cc.check(fileName);
+    }
+
+    public void checkFilesDir(String dir, int deep){
+        File dirBase = new File(dir);
+        if(dirBase.exists()){
+            File[] arqs = dirBase.listFiles();
+            CyclomaticComplexity cc = new CyclomaticComplexity();
+            for(File arq : arqs){
+                if(arq.isFile()){
+                    cc.check(arq.getAbsolutePath());
+                }else if(arq.isDirectory() && deep <= deepRec){
+                    checkFilesDir(arq.getAbsolutePath(), deep+1);
+                }
+            }
+        }
+    }
+
+    public void checkFilesDir(String dir){
+        checkFilesDir(dir, 0);
     }
 }

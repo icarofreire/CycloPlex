@@ -14,6 +14,7 @@ public class App {
         System.out.println(new App().getGreeting());
 
         CyclomaticComplexity comp = new CyclomaticComplexity();
-        comp.checkFile();
+        // comp.checkFile("teste.java");
+        comp.checkFilesDir("/home/icaro/Documentos/johan");
     }
 }

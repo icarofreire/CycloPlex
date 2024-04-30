@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 
-	public void showCyclomaticComplexity(int ccValue) {
+	public void showCyclomaticComplexity(int ccValue){
 		System.out.println("\nThe Cyclomatic Complexity is : "+ccValue);
 		System.out.print("\nResult : ");
 		if (ccValue> 50) {
@@ -12,7 +12,9 @@ import java.util.*;
 		{
 			{
 				{
-					
+					if (){
+
+					}
 				}
 			}
 		}
@@ -31,7 +33,7 @@ import java.util.*;
 	public void showCyclomaticComplexity(int ccValue) {
 		System.out.println("\nThe Cyclomatic Complexity is : "+ccValue);
 		System.out.print("\nResult : ");
-		if (ccValue> 50) {
+		if (ccValue> 50){
 			System.out.print("Most complex and highly unstable method ");
 		}
 
