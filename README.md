@@ -9,11 +9,22 @@ $ java -jar cycloplex.jar <dir>
 Avaliação por blocos:
 
 ```
-$ java -jar cycloplex.jar -b <dir>
+$ java -jar cycloplex.jar <dir> -b
 ```
 
 Avaliação por linhas:
 
 ```
-$ java -jar cycloplex.jar -l <dir>
+$ java -jar cycloplex.jar <dir> -l
+```
+
+## Development
+Executar projeto:
+```
+$ gradle run
+```
+
+Compilar projeto:
+```
+$ gradle build
 ```

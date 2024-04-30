@@ -14,11 +14,11 @@ public class App {
 
         final CyclomaticComplexity comp = new CyclomaticComplexity();
 
-        /** \/ casos de testes; */
-        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.BLOCOS.ordinal());
-        // comp.checkFile("teste.java");
-        comp.checkFilesDir("/home/icaro/Documentos/johan");
-        /** /\ casos de testes; */
+        // /** \/ casos de testes; */
+        // comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.BLOCOS.ordinal());
+        // // comp.checkFile("teste.java");
+        // comp.checkFilesDir("/home/icaro/Documentos/johan");
+        // /** /\ casos de testes; */
 
         /*\/ opções de argumentos de linha de comando; */
         if(args.length > 0 && args[0] != null){
