@@ -11,6 +11,7 @@ public class App {
     public static void main(String[] args) {
 
         CyclomaticComplexity comp = new CyclomaticComplexity();
+        // comp.checkFile("teste.java");
         comp.checkFilesDir("/home/icaro/Documentos/johan");
 
         /*\/ opções de argumentos de linha de comando; */

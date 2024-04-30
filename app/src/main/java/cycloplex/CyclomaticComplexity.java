@@ -7,17 +7,17 @@ import cycloplex.wordsLang;
 
 public class CyclomaticComplexity {
 
-    private final int deepRec = 10;
+    /**\/ profundidade da recursão por diretórios; */
+    private final int deepRec = 20;
 
 	private int checkByBlocks(final String fileName, final String lang) {
 		int complexity = 0;
         final String[] blocks = wordsLang.langBlocks.get(lang);
 		final String[] keywords = wordsLang.langWords.get(lang);
-		String line = null;
 		try {
 			final FileReader fr = new FileReader(fileName);
 			final BufferedReader br = new BufferedReader(fr);
-			line = br.readLine();
+			String line = br.readLine();
 
             int iniLine = -1;
             int fimLine = -1;
@@ -58,9 +58,53 @@ public class CyclomaticComplexity {
 				}
 				line = br.readLine();
 			}
+		}catch (IOException e){
+			e.printStackTrace();
 		}
-		catch (IOException e)
-		{
+		return (complexity);
+	}
+
+    private int checkByNestedLines(final String fileName, final String lang) {
+		int complexity = 0;
+        final String[] blocks = wordsLang.langBlocks.get(lang);
+		final String[] keywords = wordsLang.langWords.get(lang);
+		try {
+			final FileReader fr = new FileReader(fileName);
+			final BufferedReader br = new BufferedReader(fr);
+			String line = br.readLine();
+
+            int iniLine = -1;
+            int fimLine = -1;
+
+            int conLine = 0;
+			while (line != null)
+			{
+                conLine++;
+				final StringTokenizer stTokenizer = new StringTokenizer(line);
+				while (stTokenizer.hasMoreTokens())
+				{
+					String words = stTokenizer.nextToken();
+                    for(int i=0; i<keywords.length; i++)
+                    {
+                        if (keywords[i].equals(words))
+                        {
+                            complexity++;
+                            if(iniLine == -1) iniLine = conLine;
+                        }
+                    }
+				}
+				line = br.readLine();
+                if(line != null && line.isBlank()){
+                    if(iniLine != -1 && complexity > 0){
+                        fimLine = conLine;
+                        System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showCyclomaticComplexity(complexity) + ";");
+                        iniLine = -1;
+                        fimLine = -1;
+                        complexity = 0;
+                    }
+                }
+			}
+		}catch (IOException e){
 			e.printStackTrace();
 		}
 		return (complexity);
@@ -85,6 +129,7 @@ public class CyclomaticComplexity {
             ext = ext.toLowerCase();
             if(wordsLang.langWords.keySet().contains(ext)){
                 checkByBlocks(fileName, ext);
+                // checkByNestedLines(fileName, ext);
             }
         }
     }
