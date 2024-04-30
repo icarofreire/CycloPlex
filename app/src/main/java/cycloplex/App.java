@@ -15,9 +15,10 @@ public class App {
         final CyclomaticComplexity comp = new CyclomaticComplexity();
 
         // /** \/ casos de testes; */
-        // comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.BLOCOS.ordinal());
+        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
         // // comp.checkFile("teste.java");
-        // comp.checkFilesDir("/home/icaro/Documentos/johan");
+        comp.setMinComplex(4);
+        comp.checkFilesDir("/home/icaro/Documentos/johan");
         // /** /\ casos de testes; */
 
         /*\/ opções de argumentos de linha de comando; */

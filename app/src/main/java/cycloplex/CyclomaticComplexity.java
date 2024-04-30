@@ -20,9 +20,15 @@ public class CyclomaticComplexity {
         BLOCOS,
         LINHAS
     };
+    /**\/ complexidade mínima a ser exibida; */
+    private int minComplex = 0;
 
     public void setTipoParaAnalise(int tipoParaAnalise){
         this.tipoParaAnalise = tipoParaAnalise;
+    }
+
+    public void setMinComplex(int minComplex){
+        this.minComplex = minComplex;
     }
 
 	private int checkByBlocks(final String fileName, final String lang) {
@@ -63,10 +69,7 @@ public class CyclomaticComplexity {
                         indB--;
                         if(indB == 0){
                             fimLine = conLine;
-                            if(complexity > 0){
-                                System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showLevelCyclomaticComplexity(complexity) + ";");
-                            }
-
+                            avaliarExibirComplex(fileName, iniLine, fimLine, complexity);
                             iniLine = -1;
                             fimLine = -1;
                             complexity = 0;
@@ -83,7 +86,6 @@ public class CyclomaticComplexity {
 
     private int checkByNestedLines(final String fileName, final String lang) {
 		int complexity = 0;
-        final String[] blocks = wordsLang.langBlocks.get(lang);
 		final String[] keywords = wordsLang.langWords.get(lang);
 		try {
 			final FileReader fr = new FileReader(fileName);
@@ -114,7 +116,7 @@ public class CyclomaticComplexity {
                 if(line != null && line.isBlank()){
                     if(iniLine != -1 && complexity > 0){
                         fimLine = conLine;
-                        System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showLevelCyclomaticComplexity(complexity) + ";");
+                        avaliarExibirComplex(fileName, iniLine, fimLine, complexity);
                         iniLine = -1;
                         fimLine = -1;
                         complexity = 0;
@@ -126,6 +128,18 @@ public class CyclomaticComplexity {
 		}
 		return (complexity);
 	}
+
+    private void showComplex(String fileName, int iniLine, int fimLine, int complexity){
+        System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showLevelCyclomaticComplexity(complexity) + ";");
+    }
+
+    private void avaliarExibirComplex(String fileName, int iniLine, int fimLine, int complexity){
+        if(this.minComplex == 0 && complexity > 0){
+            showComplex(fileName, iniLine, fimLine, complexity);
+        }else if(this.minComplex > 0 && complexity >= this.minComplex){
+            showComplex(fileName, iniLine, fimLine, complexity);
+        }
+    }
 
 	private String showLevelCyclomaticComplexity(int ccValue) {
 		String resultRisk = "";
