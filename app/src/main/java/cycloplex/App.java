@@ -55,6 +55,8 @@ public class App {
                         comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.BLOCOS.ordinal());
                     }else if(argumentos.contains("-l")){
                         comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
+                    }else if(argumentos.contains("-bi")){
+                        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.INTERNAL_BLOCOS.ordinal());
                     }
 
                     String complex = extrairValCommand("-p=", argumentos);
