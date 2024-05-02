@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.Vector;
+import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.StringTokenizer;
 import cycloplex.wordsLang;
@@ -141,10 +143,11 @@ public class CyclomaticComplexity {
 			String line = br.readLine();
 
             Vector<Integer> vbloc = new Vector<Integer>();
-            Vector<Integer> pi = new Vector<Integer>();
+            Vector<Integer> queue = new Vector<Integer>();
+            HashMap<Integer, Vector<Integer>> blockLines = new HashMap<Integer, Vector<Integer>>();
             int iniLine = -1;
             int fimLine = -1;
-            int indB = 1;//0;
+            int indB = 1;
 
             int conLine = 0;
 			while (line != null)
@@ -158,7 +161,9 @@ public class CyclomaticComplexity {
                         if(iniLine == -1) iniLine = conLine;
                         if(vbloc.contains(indB))indB++;
                         vbloc.add(indB);
-                        pi.add(indB);
+                        queue.add(indB);
+
+                        blockLines.put(indB, new Vector<Integer>(Arrays.asList(conLine)));
                     }
 
                     for(int i=0; i<keywords.length; i++)
@@ -171,11 +176,14 @@ public class CyclomaticComplexity {
                     }
 
                     if(words.equals(blocks[1]) || words.indexOf(blocks[1]) != -1){
-                        // vbloc.add(indB);
-                        vbloc.add(pi.get(pi.size()-1));
-                        pi.remove(pi.size()-1);
-                        // indB--;
-                        // if(vbloc.contains(indB)) indB++;
+                        int ulti = queue.get(queue.size()-1);
+                        vbloc.add(queue.get(queue.size()-1));
+                        queue.remove(queue.size()-1);
+
+                        Vector<Integer> vecLinesTemp = blockLines.get(ulti);
+                        vecLinesTemp.add(conLine);
+                        blockLines.put(ulti, vecLinesTemp);
+
                         if(indB == 0){
                             fimLine = conLine;
                             avaliarExibirComplex(fileName, iniLine, fimLine, complexity);
@@ -189,8 +197,6 @@ public class CyclomaticComplexity {
 			}
             for(int i=0; i<vbloc.size(); i++){
                 int l = vbloc.get(i);
-
-                // int ind = vbloc.indexOf(l, l);
                 if(l > 0){
                     int conNeg = 0;
                     int ind = vbloc.indexOf(l, i+1);
@@ -202,10 +208,11 @@ public class CyclomaticComplexity {
                             }
                         }
                     }
-                    System.out.println(">>" + l + " - " + (ind) + " : " + conNeg);
+                    if(conNeg > 0){
+                        // System.out.println(">>" + l + " - " + (ind) + " : " + conNeg + " : [" + blockLines.get(l).get(0) + "L, " + blockLines.get(l).get(1) + "L]");
+                        avaliarExibirComplex(fileName, blockLines.get(l).get(0), blockLines.get(l).get(1), conNeg);
+                    }
                 }
-
-                // System.out.println(">>" + l);
             }
 		}catch (IOException e){
 			e.printStackTrace();
