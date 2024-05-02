@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.util.Vector;
 import java.util.Optional;
 import java.util.StringTokenizer;
 import cycloplex.wordsLang;
@@ -18,6 +19,7 @@ public class CyclomaticComplexity {
     /**\/ tipos de avaliações; */
     public static enum tiposAnalise {
         BLOCOS,
+        INTERNAL_BLOCOS,
         LINHAS
     };
     /**\/ complexidade mínima a ser exibida; */
@@ -129,6 +131,88 @@ public class CyclomaticComplexity {
 		return (complexity);
 	}
 
+    private int checkByInternalBlocks(final String fileName, final String lang) {
+		int complexity = 0;
+        final String[] blocks = wordsLang.langBlocks.get(lang);
+		final String[] keywords = wordsLang.langWords.get(lang);
+		try {
+			final FileReader fr = new FileReader(fileName);
+			final BufferedReader br = new BufferedReader(fr);
+			String line = br.readLine();
+
+            Vector<Integer> vbloc = new Vector<Integer>();
+            Vector<Integer> pi = new Vector<Integer>();
+            int iniLine = -1;
+            int fimLine = -1;
+            int indB = 1;//0;
+
+            int conLine = 0;
+			while (line != null)
+			{
+                conLine++;
+				final StringTokenizer stTokenizer = new StringTokenizer(line);
+				while (stTokenizer.hasMoreTokens())
+				{
+					String words = stTokenizer.nextToken();
+                    if(words.equals(blocks[0]) || words.indexOf(blocks[0]) != -1){
+                        if(iniLine == -1) iniLine = conLine;
+                        if(vbloc.contains(indB))indB++;
+                        vbloc.add(indB);
+                        pi.add(indB);
+                    }
+
+                    for(int i=0; i<keywords.length; i++)
+                    {
+                        if (keywords[i].equals(words))
+                        {
+                            complexity++;
+                            vbloc.add(-conLine);
+                        }
+                    }
+
+                    if(words.equals(blocks[1]) || words.indexOf(blocks[1]) != -1){
+                        // vbloc.add(indB);
+                        vbloc.add(pi.get(pi.size()-1));
+                        pi.remove(pi.size()-1);
+                        // indB--;
+                        // if(vbloc.contains(indB)) indB++;
+                        if(indB == 0){
+                            fimLine = conLine;
+                            avaliarExibirComplex(fileName, iniLine, fimLine, complexity);
+                            iniLine = -1;
+                            fimLine = -1;
+                            complexity = 0;
+                        }
+                    }
+				}
+				line = br.readLine();
+			}
+            for(int i=0; i<vbloc.size(); i++){
+                int l = vbloc.get(i);
+
+                // int ind = vbloc.indexOf(l, l);
+                if(l > 0){
+                    int conNeg = 0;
+                    int ind = vbloc.indexOf(l, i+1);
+
+                    if(ind != -1){
+                        for(int k=i; k<ind; k++){
+                            if(vbloc.get(k) < 0){
+                                conNeg++;
+                            }
+                        }
+                    }
+                    System.out.println(">>" + l + " - " + (ind) + " : " + conNeg);
+                }
+
+                // System.out.println(">>" + l);
+            }
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+		return (complexity);
+	}
+
     private void showComplex(String fileName, int iniLine, int fimLine, int complexity){
         System.out.println(fileName + ": " + iniLine + "L - " + fimLine + "L: " + complexity + "; " + showLevelCyclomaticComplexity(complexity) + ";");
     }
@@ -164,6 +248,8 @@ public class CyclomaticComplexity {
                     checkByBlocks(fileName, ext);
                 }else if(this.tipoParaAnalise == tiposAnalise.LINHAS.ordinal()){
                     checkByNestedLines(fileName, ext);
+                }else if(this.tipoParaAnalise == tiposAnalise.INTERNAL_BLOCOS.ordinal()){
+                    checkByInternalBlocks(fileName, ext);
                 }
             }
         }

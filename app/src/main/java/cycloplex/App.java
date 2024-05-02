@@ -27,10 +27,11 @@ public class App {
 
     private static void testes(CyclomaticComplexity comp){
         /** \/ casos de testes; */
-        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
-        comp.setMinComplex(4);
-        // comp.checkFile("teste.java");
-        comp.checkFilesDir("/home/icaro/Documentos/johan");
+        // comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.LINHAS.ordinal());
+        comp.setTipoParaAnalise(CyclomaticComplexity.tiposAnalise.INTERNAL_BLOCOS.ordinal());
+        // comp.setMinComplex(4);
+        comp.checkFile("teste.java");
+        // comp.checkFilesDir("/home/icaro/Documentos/johan");
         /** /\ casos de testes; */
     }
 
@@ -38,7 +39,7 @@ public class App {
 
         final CyclomaticComplexity comp = new CyclomaticComplexity();
 
-        // testes(comp);
+        testes(comp);
 
         /*\/ opções de argumentos de linha de comando; */
         if(args.length > 0){
