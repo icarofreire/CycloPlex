@@ -12,6 +12,12 @@ public class wordsLang {
 
             blocks = new String[]{"{", "}"};
             put("js", blocks);
+
+            blocks = new String[]{"{", "}"};
+            put("tsx", blocks);
+
+            blocks = new String[]{":"};
+            put("py", blocks);
         }
     };
 
@@ -23,6 +29,12 @@ public class wordsLang {
 
             keywords = new String[]{"if","else","while","case","for","switch","do","continue","break","&&","||","?",":","catch","finally","throw","throws","default","return"};
             put("js", keywords);
+
+            keywords = new String[]{"if","else","while","case","for","switch","do","continue","break","&&","||","?",":","catch","finally","throw","throws","default","return"};
+            put("tsx", keywords);
+
+            keywords = new String[]{"if","else", "elif","while","case","for","switch","do","continue","break","and","or","?",":","catch","finally","throw","throws","default","return", "except"};
+            put("py", keywords);
         }
     };
 
